@@ -3,8 +3,9 @@ import hashlib
 import asyncio
 import json
 import websockets
+import logging
 from threading import Thread
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template
 from kademlia.network import Server
 from nacl.signing import SigningKey
 from nacl.encoding import HexEncoder
@@ -22,6 +23,8 @@ app = Flask(__name__)
 dht = Server()
 connections = {}
 user_identity = None
+
+logging.basicConfig(level=logging.INFO)
 
 class PeerSession:
     def __init__(self, websocket):
@@ -50,7 +53,7 @@ async def handle_connection(websocket, path):
                 await handle_message(session, data)
 
     except Exception as e:
-        print(f"Connection error: {e}")
+        logging.error(f"Connection error: {e}")
     finally:
         for room_id in session.rooms:
             connections[room_id].discard(websocket)
@@ -89,19 +92,23 @@ async def handle_message(session, data):
                 }))
 
 async def connect_to_peer(session, peer_data):
-    try:
-        async with websockets.connect(
-            f"ws://{peer_data['onion']}:{WS_PORT}",
-            socks_proxy="socks5://127.0.0.1:9050"
-        ) as ws:
-            connections.setdefault(peer_data['room_id'], set()).add(ws)
-            await ws.send(json.dumps({
-                "type": "peer_handshake",
-                "peer_id": session.peer_id,
-                "verify_key": session.verify_key.encode(encoder=HexEncoder).decode()
-            }))
-    except Exception as e:
-        print(f"Connection failed to {peer_data['onion']}: {e}")
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            async with websockets.connect(
+                f"ws://{peer_data['onion']}:{WS_PORT}",
+                socks_proxy="socks5://127.0.0.1:9050"
+            ) as ws:
+                connections.setdefault(peer_data['room_id'], set()).add(ws)
+                await ws.send(json.dumps({
+                    "type": "peer_handshake",
+                    "peer_id": session.peer_id,
+                    "verify_key": session.verify_key.encode(encoder=HexEncoder).decode()
+                }))
+                return
+        except Exception as e:
+            logging.error(f"Connection failed to {peer_data['onion']} on attempt {attempt + 1}: {e}")
+            await asyncio.sleep(2 ** attempt)  # Exponential backoff
 
 def run_websocket_server():
     loop = asyncio.new_event_loop()
@@ -112,79 +119,7 @@ def run_websocket_server():
 
 @app.route('/')
 def interface():
-    return render_template_string('''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>{{name}} v{{version}}</title>
-            <style>
-                /* Security-focused dark theme */
-                body { background: #1a1a1a; color: #e0e0e0; }
-                #messages { border: 1px solid #404040; padding: 1rem; }
-            </style>
-        </head>
-        <body>
-            <h1>{{name}} v{{version}}</h1>
-            <div id="messages"></div>
-            <input type="password" id="secret" placeholder="Room Secret">
-            <button onclick="joinRoom()">Join Room</button>
-            <div id="chatUI" style="display:none;">
-                <input type="text" id="messageInput">
-                <button onclick="sendMessage()">Send</button>
-            </div>
-            <script>
-                let ws, currentRoom;
-                
-                async function joinRoom() {
-                    const secret = document.getElementById('secret').value;
-                    ws = new WebSocket(`ws://${window.location.host}/ws`);
-                    
-                    ws.onmessage = async (event) => {
-                        const msg = JSON.parse(event.data);
-                        if(msg.type === 'identity') {
-                            sessionStorage.peerId = msg.peer_id;
-                            sessionStorage.verifyKey = msg.verify_key;
-                            ws.send(JSON.stringify({
-                                type: 'join_room',
-                                secret: secret
-                            }));
-                            document.getElementById('chatUI').style.display = 'block';
-                        }
-                        else if(msg.type === 'message') {
-                            const decrypted = await decryptMessage(msg.ciphertext, secret);
-                            displayMessage(msg.sender, decrypted);
-                        }
-                    };
-                }
-
-                async function sendMessage() {
-                    const message = document.getElementById('messageInput').value;
-                    const ciphertext = await encryptMessage(message, secret);
-                    ws.send(JSON.stringify({
-                        type: 'message',
-                        room_id: currentRoom,
-                        ciphertext: ciphertext
-                    }));
-                }
-
-                async function deriveKey(secret) {
-                    const encoder = new TextEncoder();
-                    const baseKey = await crypto.subtle.importKey(
-                        'raw', encoder.encode(secret),
-                        { name: 'PBKDF2' }, false, ['deriveKey']
-                    );
-                    return crypto.subtle.deriveKey(
-                        { name: 'PBKDF2', salt: encoder.encode('PPCHAT-KEY'), iterations: 100000, hash: 'SHA-256' },
-                        baseKey,
-                        { name: 'AES-GCM', length: 256 },
-                        true,
-                        ['encrypt', 'decrypt']
-                    );
-                }
-            </script>
-        </body>
-        </html>
-    ''', name=APP_NAME, version=VERSION)
+    return render_template('interface.html', name=APP_NAME, version=VERSION)
 
 if __name__ == "__main__":
     start_tor()
