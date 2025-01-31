@@ -1,0 +1,35 @@
+# Tor state file last generated on 2025-01-31 18:33:31 local time
+# Other times below are in UTC
+# You *do not* need to edit this file.
+
+CircuitBuildTimeBin 75 2
+CircuitBuildTimeBin 125 10
+CircuitBuildTimeBin 175 7
+CircuitBuildTimeBin 225 7
+CircuitBuildTimeBin 275 4
+CircuitBuildTimeBin 475 2
+Dormant 0
+Guard in=default rsa_id=2C63AAB5B31D757CFC575FC66852AB9715ACD2DE nickname=marshrutizator1 sampled_on=2025-01-26T10:53:10 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=8D89ECA4C93928711A0BD6DB80F547A09AEF2D67 nickname=bauruine sampled_on=2025-01-22T04:17:53 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=9DC0D6442AE1036FDB556185C95754911EB1065A nickname=phobos sampled_on=2025-01-29T02:19:11 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=3AF33BF8811F282580045FFD87579461B6D8D5F3 nickname=bauruine sampled_on=2025-01-26T05:37:17 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=95545CBA71AD21136C40C927F19C067FF128078F nickname=bauruine sampled_on=2025-01-28T03:45:11 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=B7B35AFD69A1F8C0453A45FDC92B28824F34F402 nickname=TorScale sampled_on=2025-01-23T23:06:21 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=90333CD7DF2601BE73557753DEE9B4C8444B5E4A nickname=Zebala sampled_on=2025-01-22T01:02:01 sampled_by=0.4.2.7 listed=1 confirmed_on=2025-01-20T02:32:48 confirmed_idx=0 pb_use_attempts=12.000000 pb_use_successes=12.000000 pb_circ_attempts=16.000000 pb_circ_successes=16.000000 pb_successful_circuits_closed=16.000000
+Guard in=default rsa_id=304EF9E012BE51190C6DDD5CFBAD8E3F3E875A43 nickname=TorRelay2c sampled_on=2025-01-31T04:56:30 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=8BB55A3AFBB7E5D9EB83215DEC8F219E68DF9B6D nickname=PoloUnivAretino sampled_on=2025-01-22T09:02:52 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=4BDBCEA35E84C2C58AA37F030619092A23B638C1 nickname=raxoni sampled_on=2025-01-29T23:13:48 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=DA506D11F5371B6474EE9AD1C0EDA8189D4702FD nickname=fuchur sampled_on=2025-01-26T05:39:59 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=715590A1E1654B897C6EAC7699CC9A7CA9EF00AB nickname=Tordel2 sampled_on=2025-01-30T23:30:23 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=6ED76B2B9EDE932C87861A1B1A0F92D8CC6D297D nickname=h2961181 sampled_on=2025-01-30T20:36:08 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=1815E96EDB9444E9CD0D11FB9BB695B687C21E82 nickname=FTPhalifaxRWTH sampled_on=2025-01-28T06:01:10 sampled_by=0.4.2.7 listed=1 confirmed_on=2025-01-20T05:07:02 confirmed_idx=1 pb_use_attempts=10.000000 pb_use_successes=10.000000 pb_circ_attempts=16.000000 pb_circ_successes=16.000000 pb_successful_circuits_closed=16.000000
+Guard in=default rsa_id=876BA5C41AB7F4A8A99AACAB980C081DBA61711B nickname=TORKeFFORG13 sampled_on=2025-01-23T04:23:41 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=EA670AB58CD5E1D5DCAB571D100EA1D36D72CA28 nickname=billgates sampled_on=2025-01-22T23:19:11 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=B0543A3DF8D402F53998E03CFE1B35845DB27D9D nickname=relayon1142 sampled_on=2025-01-30T08:00:34 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=A67891856C914E998E82D97A4CCC17381AC4E4FE nickname=tuxiHtz sampled_on=2025-01-19T21:41:02 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=E911677861BBE7FEB3F703A9C36B424325721AB8 nickname=Freedom sampled_on=2025-01-31T17:24:06 sampled_by=0.4.2.7 listed=1
+Guard in=default rsa_id=B017B46A480A155AD211CBB42AF86D98C45D9CD0 nickname=Trismegistus sampled_on=2025-01-27T09:06:18 sampled_by=0.4.2.7 listed=1
+LastWritten 2025-01-31 18:33:31
+MinutesSinceUserActivity 1
+TorVersion Tor 0.4.2.7
+TotalBuildTimes 32
